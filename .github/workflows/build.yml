@@ -61,7 +61,7 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - uses: gradle/actions/setup-gradle@v3
+      - uses: gradle/gradle-build-action@v3
         with:
           arguments: |
             build
@@ -134,17 +134,9 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - uses: gradle/actions/setup-gradle@v3
-        # skipping release branches because the versions in those branches are not snapshots
-        # (also this skips pull requests)
-        if: ${{ github.ref_name == 'main' && github.repository == 'open-telemetry/opentelemetry-java' }}
+      - uses: gradle/gradle-build-action@v3
         with:
-          arguments: assemble publishToSonatype
-        env:
-          SONATYPE_USER: ${{ secrets.SONATYPE_USER }}
-          SONATYPE_KEY: ${{ secrets.SONATYPE_KEY }}
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
+          arguments: assemble
 
   build-graal:
     runs-on: ubuntu-latest

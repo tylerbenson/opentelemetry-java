@@ -24,12 +24,7 @@ jobs:
       - name: Build and publish artifacts
         uses: gradle/actions/setup-gradle@v3
         with:
-          arguments: assemble publishToSonatype closeAndReleaseSonatypeStagingRepository
-        env:
-          SONATYPE_USER: ${{ secrets.SONATYPE_USER }}
-          SONATYPE_KEY: ${{ secrets.SONATYPE_KEY }}
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          GPG_PASSWORD: ${{ secrets.GPG_PASSWORD }}
+          arguments: assemble
 
       - name: Set environment variables
         run: |

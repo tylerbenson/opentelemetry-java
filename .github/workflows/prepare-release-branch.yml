@@ -24,6 +24,9 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - prereqs
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
 
@@ -56,8 +59,7 @@ jobs:
 
       - name: Create pull request against the release branch
         env:
-          # not using secrets.GITHUB_TOKEN since pull requests from that token do not run workflows
-          GH_TOKEN: ${{ secrets.OPENTELEMETRYBOT_GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           message="Prepare release $VERSION"
           branch="opentelemetrybot/prepare-release-${VERSION}"
@@ -73,6 +75,9 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - prereqs
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
 
@@ -104,8 +109,7 @@ jobs:
 
       - name: Create pull request against main
         env:
-          # not using secrets.GITHUB_TOKEN since pull requests from that token do not run workflows
-          GH_TOKEN: ${{ secrets.OPENTELEMETRYBOT_GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           message="Update version to $NEXT_VERSION"
           body="Update version to \`$NEXT_VERSION\`."
