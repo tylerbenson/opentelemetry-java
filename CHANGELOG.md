@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## Version 1.37.0 (2024-03-20)
+
 ## Version 1.36.0 (2024-03-08)
 
 ### SDK
