@@ -62,7 +62,8 @@ jobs:
           mkdir sigstore
           ls **/build/libs/*.jar | xargs -I % cosign sign-blob --yes % --bundle %.sigstore
           mv **/build/libs/*.sigstore ./sigstore/
-          zip opentelemetry-java-SIGSTORE.zip ./sigstore/*
+          zip $RUNNER_TEMP/opentelemetry-java-SIGSTORE.zip ./sigstore/*
+        # Note: zip file is placed in the temp dir above to prevent deletion during checkout below.
 
         # check out main branch to verify there won't be problems with merging the change log
         # at the end of this workflow
@@ -129,7 +130,7 @@ jobs:
                             --title "Version $VERSION" \
                             --notes-file /tmp/release-notes.txt \
                             v$VERSION \
-                            opentelemetry-java-SIGSTORE.zip
+                            $RUNNER_TEMP/opentelemetry-java-SIGSTORE.zip
 
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
