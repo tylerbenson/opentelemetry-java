@@ -4,6 +4,9 @@ on:
 
 jobs:
   release:
+    permissions:
+      id-token: write # needed by cosign for signing with GitHub OIDC Token
+
     runs-on: ubuntu-22.04
     outputs:
       version: ${{ steps.create-github-release.outputs.version }}
@@ -50,6 +53,16 @@ jobs:
           fi
           echo "VERSION=$version" >> $GITHUB_ENV
           echo "PRIOR_VERSION=$prior_version" >> $GITHUB_ENV
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3.4.0
+
+      - name: Sign the artifacts with GitHub OIDC Token
+        run: |
+          mkdir sigstore
+          ls **/build/libs/*.jar | xargs -I % cosign sign-blob --yes % --bundle %.sigstore
+          mv **/build/libs/*.sigstore ./sigstore/
+          zip opentelemetry-java-SIGSTORE.zip ./sigstore/*
 
         # check out main branch to verify there won't be problems with merging the change log
         # at the end of this workflow
@@ -115,7 +128,8 @@ jobs:
           gh release create --target $GITHUB_REF_NAME \
                             --title "Version $VERSION" \
                             --notes-file /tmp/release-notes.txt \
-                            v$VERSION
+                            v$VERSION \
+                            opentelemetry-java-SIGSTORE.zip
 
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
