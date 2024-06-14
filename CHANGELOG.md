@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## Version 1.40.0 (2024-06-14)
+
 ## Version 1.39.0 (2024-06-07)
 
 ### API
