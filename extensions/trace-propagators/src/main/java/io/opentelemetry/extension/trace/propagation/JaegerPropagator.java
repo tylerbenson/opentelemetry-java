@@ -12,6 +12,7 @@ import io.opentelemetry.api.internal.TemporaryBuffers;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.SpanContext;
 import io.opentelemetry.api.trace.SpanId;
+import io.opentelemetry.api.trace.SpanLinks;
 import io.opentelemetry.api.trace.TraceFlags;
 import io.opentelemetry.api.trace.TraceId;
 import io.opentelemetry.api.trace.TraceState;
@@ -134,7 +135,7 @@ public final class JaegerPropagator implements TextMapPropagator {
 
     SpanContext spanContext = getSpanContextFromHeader(carrier, getter);
     if (spanContext.isValid()) {
-      context = context.with(Span.wrap(spanContext));
+      context = SpanLinks.updateParentAndAddSpan(context, spanContext);
     }
 
     Baggage baggage = getBaggageFromHeader(carrier, getter);

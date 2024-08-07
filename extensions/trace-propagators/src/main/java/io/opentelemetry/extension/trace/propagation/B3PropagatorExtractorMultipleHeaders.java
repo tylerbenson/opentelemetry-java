@@ -6,6 +6,7 @@
 package io.opentelemetry.extension.trace.propagation;
 
 import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.SpanLinks;
 import io.opentelemetry.context.Context;
 import io.opentelemetry.context.propagation.TextMapGetter;
 import java.util.Optional;
@@ -55,6 +56,6 @@ final class B3PropagatorExtractorMultipleHeaders implements B3PropagatorExtracto
     }
 
     String sampled = getter.get(carrier, B3Propagator.SAMPLED_HEADER);
-    return Optional.of(context.with(Span.wrap(Common.buildSpanContext(traceId, spanId, sampled))));
+    return Optional.of(SpanLinks.updateParentAndAddSpan(context, Common.buildSpanContext(traceId, spanId, sampled)));
   }
 }

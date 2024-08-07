@@ -13,6 +13,7 @@ import io.opentelemetry.api.internal.TemporaryBuffers;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.SpanContext;
 import io.opentelemetry.api.trace.SpanId;
+import io.opentelemetry.api.trace.SpanLinks;
 import io.opentelemetry.api.trace.TraceFlags;
 import io.opentelemetry.api.trace.TraceId;
 import io.opentelemetry.api.trace.TraceState;
@@ -143,7 +144,7 @@ public final class W3CTraceContextPropagator implements TextMapPropagator {
       return context;
     }
 
-    return context.with(Span.wrap(spanContext));
+    return SpanLinks.updateParentAndAddSpan(context, spanContext);
   }
 
   private static <C> SpanContext extractImpl(@Nullable C carrier, TextMapGetter<C> getter) {
